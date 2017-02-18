@@ -8,7 +8,10 @@ public class BaseManager<T> : MonoBehaviour where T : MonoBehaviour
         get
         {
             //なかったら探す
-            if (instance == null) instance = (T)FindObjectOfType(typeof(T));
+            if (instance == null)
+            {
+                instance = (T)FindObjectOfType(typeof(T));
+            }
             return instance;
         }
         protected set
