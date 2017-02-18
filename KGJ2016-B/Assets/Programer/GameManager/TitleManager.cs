@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class TitleManager : BaseManager<TitleManager>
 {
+    //シーンの遷移が実行されているか？
+    bool isChangeScene = false;
+    public string sceneName;
 
     // Use this for initialization
     void Start()
@@ -19,7 +22,9 @@ public class TitleManager : BaseManager<TitleManager>
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            SceneManager.LoadScene("Menu");
+            if (isChangeScene) return;
+            isChangeScene = true;
+            StartCoroutine(KKUtilities.ChangeScene(sceneName, 1.0f));
         }
     }
 }

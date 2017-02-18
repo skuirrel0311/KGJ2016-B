@@ -5,18 +5,34 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : BaseManager<TitleManager>
 {
+    //シーンの遷移が実行されているか？
+    bool isChangeScene = false;
+    public string[] sceneName;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            SceneManager.LoadScene("Main");
+            ChangeScene(sceneName[0]);
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ChangeScene(sceneName[1]);
+        }
+    }
+
+    void ChangeScene(string sceneName)
+    {
+        if (isChangeScene) return;
+        isChangeScene = true;
+        StartCoroutine(KKUtilities.ChangeScene(sceneName, 1.0f));
     }
 }

@@ -5,10 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainManager : BaseManager<TitleManager>
 {
+    //シーンの遷移が実行されているか？
+    bool isChangeScene = false;
+    public string[] sceneName;
 
-	// Use this for initialization
-	void Start () {
-		
+    // Use this for initialization
+    void Start () {
+
 	}
 	
 	// Update is called once per frame
@@ -16,11 +19,18 @@ public class MainManager : BaseManager<TitleManager>
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            SceneManager.LoadScene("Result");
+            ChangeScene(sceneName[0]);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("Lose");
+            ChangeScene(sceneName[1]);
         }
+    }
+
+    void ChangeScene(string sceneName)
+    {
+        if (isChangeScene) return;
+        isChangeScene = true;
+        StartCoroutine(KKUtilities.ChangeScene(sceneName, 1.0f));
     }
 }
