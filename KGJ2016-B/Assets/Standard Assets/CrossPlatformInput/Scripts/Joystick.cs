@@ -43,11 +43,9 @@ namespace UnityStandardAssets.CrossPlatformInput
 
             
 
-            if (!CrossPlatformInputManager.ButtonExists("Fire1"))
-            {
-                Debug.Log("!");
+
                 delta.y = -delta.y;
-            }
+            
 
 			delta /= MovementRange;
 			if (m_UseX)

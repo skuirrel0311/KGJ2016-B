@@ -17,6 +17,10 @@ public class CarCollision : MonoBehaviour {
         {
         if (collider.gameObject.tag == "Finish")
         {
+            //if(flag){
+            //やられ処理
+            //}
+            //else{//攻撃処理 }
             DestroyObject(collider.gameObject);
             //
         }
