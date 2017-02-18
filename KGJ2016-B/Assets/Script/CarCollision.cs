@@ -15,7 +15,7 @@ public class CarCollision : MonoBehaviour {
 	}
     void OnCollisionEnter(Collision collider)
         {
-        if (collider.gameObject.tag == "Enemy")
+        if (collider.gameObject.tag == "Finish")
         {
             DestroyObject(collider.gameObject);
             //
