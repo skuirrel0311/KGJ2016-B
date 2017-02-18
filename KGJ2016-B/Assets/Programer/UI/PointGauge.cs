@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class PointGauge : BaseGauge
 {
-    Image[] pointImages;
+    protected Image[] pointImages;
     [SerializeField]
-    GameObject pointImagePrefab = null;
+    protected GameObject pointImagePrefab = null;
 
     [SerializeField]
     Vector3 origin = Vector3.zero;
