@@ -51,7 +51,7 @@ public class TentacleManager : MonoBehaviour
         }
 
         //最初にとりあえず何体か出しておく
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 1; i++)
         {
             Spawn();
         }

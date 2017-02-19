@@ -27,6 +27,7 @@ public class TentacleContoller : MonoBehaviour
 
     public int positionIndex;
     public bool isLive;
+    public float startY;
 
     public virtual void Start()
     {
@@ -35,7 +36,7 @@ public class TentacleContoller : MonoBehaviour
     }
     public virtual void Update()
     {
-        if(tip.transform.position.x > 300.0f || tip.transform.position.z > 300.0f)
+        if(tip.transform.position.x > 10000f || tip.transform.position.z > 1000.0f)
         {
             StartCoroutine(FadeOut());
         }
@@ -46,7 +47,7 @@ public class TentacleContoller : MonoBehaviour
         float t = 0.0f;
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition;
-        targetPosition.y = 0.0f;
+        targetPosition.y = startY;
 
         while (true)
         {
