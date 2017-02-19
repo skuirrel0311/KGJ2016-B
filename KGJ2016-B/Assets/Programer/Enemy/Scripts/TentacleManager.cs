@@ -48,8 +48,7 @@ public class TentacleManager : MonoBehaviour
 
     void Update()
     {
-        InterbalSpawning();
-        
+        InterbalSpawning(1);        
     }
 
     void Spawn()
@@ -69,13 +68,16 @@ public class TentacleManager : MonoBehaviour
         }
     }
 
-    //一定時間ごとに沸くバージョン
-    void InterbalSpawning()
+    //一定時間ごとにspawnNum本の触手が沸くバージョン
+    void InterbalSpawning(int spawnNum)
     {
         time += Time.deltaTime;
         if (time > spawnInterbal)
         {
-            Spawn();
+            for (int i = 0; i < spawnNum; i++)
+            {
+                Spawn();
+            }
             time = 0f;
         }
     }
