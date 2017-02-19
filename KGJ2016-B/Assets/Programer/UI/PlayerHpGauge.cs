@@ -6,29 +6,10 @@ public class PlayerHpGauge : PointGauge
 
     public override void Update()
     {
+        base.Update();
         ChangeValue(CarPlaramater.CarHp);
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            ChangeValue(1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            ChangeValue(-1);
-        }
+        Debug.Log(value);
 
         base.Update();
-    }
-
-    protected override void SetGaugeImage()
-    {
-        ////×を書く
-        //for (int i = 0; i < maxValue; i++)
-        //{
-        //    if (i < value)
-        //    {
-        //        pointImages[i].sprite = pointImagePrefab.GetComponent<Image>().sprite;
-        //    }
-        //}
     }
 }
