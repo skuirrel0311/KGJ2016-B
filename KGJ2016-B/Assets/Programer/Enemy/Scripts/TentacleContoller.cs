@@ -27,6 +27,8 @@ public class TentacleContoller : MonoBehaviour
 
     public int positionIndex;
     public bool isLive;
+    public float startY = -4.46f;
+    public float endY = -50.0f;
 
     public virtual void Start()
     {
@@ -35,7 +37,7 @@ public class TentacleContoller : MonoBehaviour
     }
     public virtual void Update()
     {
-        if(tip.transform.position.x > 300.0f || tip.transform.position.z > 300.0f)
+        if(tip.transform.position.x > 500.0f || tip.transform.position.z > 500.0f)
         {
             StartCoroutine(FadeOut());
         }
@@ -46,7 +48,7 @@ public class TentacleContoller : MonoBehaviour
         float t = 0.0f;
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition;
-        targetPosition.y = 0.0f;
+        targetPosition.y = startY;
 
         while (true)
         {
@@ -63,6 +65,7 @@ public class TentacleContoller : MonoBehaviour
     public virtual void Attack()
     {
         coroutine = StartCoroutine(Attacking());
+        state = TentacleState.Attack;
     }
 
     IEnumerator Attacking()
@@ -86,33 +89,28 @@ public class TentacleContoller : MonoBehaviour
         Vector3 targetDirection;
         Vector3 cross;
         if (player != null)
-            targetDirection = Vector3.Normalize(player.transform.position - transform.position);
+            targetDirection = Vector3.Normalize(player.transform.position - tip.transform.position);
         else
             targetDirection = Vector3.Normalize(Vector3.zero - tip.transform.position);
         cross = Vector3.Cross(targetDirection, Vector3.up).normalized;
         coefficient = 0.0f;
-        int count = 8;
         int patten = 0;
 
         while(true)
         {
-            count--;
             patten = Random.Range(0, 3);
 
-            if(patten != 0)
+            if (patten != 0)
             {
                 coefficient = Random.Range(-0.5f, 0.5f);
                 AddForce(bodys, cross * Time.deltaTime * powar * coefficient);
             }
             else
             {
-                AddForce(bodys, targetDirection * Time.deltaTime * powar);
+                AddForce(bodys, targetDirection * Time.deltaTime * powar * 2.0f);
             }
-
-            if (count <= 0) break;
             yield return wait;
         }
-        isAttacking = false;
     }
 
     void AddForce(Rigidbody[] bodys, Vector3 powar)
@@ -137,6 +135,33 @@ public class TentacleContoller : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         TentacleManager.Instance.isSpawned[positionIndex] = false;
+
+        float t = 0.0f;
+        float limitTime = 2.0f;
+        Vector3 startPosition = transform.position;
+        Vector3 targetPosition = startPosition;
+        targetPosition.y = endY;
+
+        DesableRagDoll();
+
+        while(true)
+        {
+            t += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t / limitTime);
+            if (t > limitTime) break;
+            yield return null;
+        }
+
         Destroy(gameObject);
+    }
+
+    void DesableRagDoll()
+    {
+        Rigidbody[] body = GetComponentsInChildren<Rigidbody>();
+
+        for(int i = 0;i < body.Length;i++)
+        {
+            body[i].isKinematic = true;
+        }
     }
 }
