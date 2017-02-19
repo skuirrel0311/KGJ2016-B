@@ -22,6 +22,9 @@ public class TentacleContoller : MonoBehaviour
     Coroutine coroutine;
     bool isAttacking;
 
+    public int positionIndex;
+    public bool isLive;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -37,8 +40,6 @@ public class TentacleContoller : MonoBehaviour
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition;
         targetPosition.y = 1.0f;
-        Rigidbody body = tip.GetComponent<Rigidbody>();
-        WaitForSeconds wait = new WaitForSeconds(0.5f);
 
         while (true)
         {
@@ -48,6 +49,8 @@ public class TentacleContoller : MonoBehaviour
             if (t > 3.0f) break;
             yield return null;
         }
+
+        Attack();
     }
 
     public void Attack()
@@ -102,6 +105,8 @@ public class TentacleContoller : MonoBehaviour
 
     IEnumerator FadeOut()
     {
-        yield return null;
+        yield return new WaitForSeconds(1.0f);
+        TentacleManager.Instance.isSpawned[positionIndex] = false;
+        Destroy(gameObject);
     }
 }
