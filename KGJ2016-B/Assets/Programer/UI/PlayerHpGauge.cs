@@ -3,17 +3,15 @@ using UnityEngine.UI;
 
 public class PlayerHpGauge : PointGauge
 {
-    [SerializeField]
-    Image batten = null;
 
     public override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             ChangeValue(1);
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             ChangeValue(-1);
         }
@@ -23,17 +21,13 @@ public class PlayerHpGauge : PointGauge
 
     protected override void SetGaugeImage()
     {
-        //×を書く
-        for (int i = 0; i < maxValue; i++)
-        {
-            if (i >= value)
-            {
-                pointImages[i].sprite = batten.sprite;
-            }
-            else
-            {
-                pointImages[i].sprite = pointImagePrefab.GetComponent<Image>().sprite;
-            }
-        }
+        ////×を書く
+        //for (int i = 0; i < maxValue; i++)
+        //{
+        //    if (i < value)
+        //    {
+        //        pointImages[i].sprite = pointImagePrefab.GetComponent<Image>().sprite;
+        //    }
+        //}
     }
 }

@@ -14,7 +14,7 @@ public class MainManager : BaseManager<TitleManager>
     // Use this for initialization
     void Start()
     {
-
+        AudioManager.Instance.Play("MainBgm");
     }
 
     // Update is called once per frame

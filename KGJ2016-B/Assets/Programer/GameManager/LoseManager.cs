@@ -14,7 +14,7 @@ public class LoseManager : BaseManager<TitleManager>
     // Use this for initialization
     void Start()
     {
-
+        AudioManager.Instance.PlayOneShot("GameoverSE");
     }
 
     // Update is called once per frame
@@ -28,10 +28,12 @@ public class LoseManager : BaseManager<TitleManager>
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            AudioManager.Instance.PlayOneShot("Let'sGoSE");
             ChangeScene(sceneName[0]);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            AudioManager.Instance.PlayOneShot("NoSE");
             ChangeScene(sceneName[1]);
         }
     }

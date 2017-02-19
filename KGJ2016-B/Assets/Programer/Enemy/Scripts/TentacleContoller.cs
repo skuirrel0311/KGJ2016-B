@@ -12,6 +12,9 @@ public class TentacleContoller : MonoBehaviour
     [SerializeField]
     GameObject tip = null;
 
+    [SerializeField]
+    GameObject[] others = null;
+
     GameObject player;
 
     public TentacleState state = TentacleState.StartUp;
@@ -25,13 +28,17 @@ public class TentacleContoller : MonoBehaviour
     public int positionIndex;
     public bool isLive;
 
-    void Start()
+    public virtual void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         StartCoroutine(StartUp());
     }
-    void Update()
+    public virtual void Update()
     {
+        if(tip.transform.position.x > 300.0f || tip.transform.position.z > 300.0f)
+        {
+            StartCoroutine(FadeOut());
+        }
     }
 
     IEnumerator StartUp()
@@ -39,7 +46,7 @@ public class TentacleContoller : MonoBehaviour
         float t = 0.0f;
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition;
-        targetPosition.y = 1.0f;
+        targetPosition.y = 0.0f;
 
         while (true)
         {
@@ -53,7 +60,7 @@ public class TentacleContoller : MonoBehaviour
         Attack();
     }
 
-    public void Attack()
+    public virtual void Attack()
     {
         coroutine = StartCoroutine(Attacking());
     }
@@ -61,45 +68,68 @@ public class TentacleContoller : MonoBehaviour
     IEnumerator Attacking()
     {
         isAttacking = true;
-        Rigidbody body = tip.GetComponent<Rigidbody>();
-        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        Rigidbody[] bodys = new Rigidbody[others.Length + 1];
+        float coefficient = 0.5f;
+
+        bodys[0] = tip.GetComponent<Rigidbody>();
+        for (int i = 1; i < bodys.Length; i++)
+        {
+            bodys[i] = others[i - 1].GetComponent<Rigidbody>();
+        }
+
+        // = tip.GetComponent<Rigidbody>();
+
+        WaitForSeconds wait = new WaitForSeconds(0.7f);
         state = TentacleState.Attack;
 
         //倒したい方向を調べる
         Vector3 targetDirection;
+        Vector3 cross;
         if (player != null)
-            targetDirection = Vector3.Normalize(player.transform.position - tip.transform.position);
+            targetDirection = Vector3.Normalize(player.transform.position - transform.position);
         else
             targetDirection = Vector3.Normalize(Vector3.zero - tip.transform.position);
+        cross = Vector3.Cross(targetDirection, Vector3.up).normalized;
+        coefficient = 0.0f;
+        int count = 8;
+        int patten = 0;
 
-        tip.GetComponent<Rigidbody>().AddForce(targetDirection * Time.deltaTime * powar);
+        while(true)
+        {
+            count--;
+            patten = Random.Range(0, 3);
 
-        yield return new WaitForSeconds(3.0f);
+            if(patten != 0)
+            {
+                coefficient = Random.Range(-0.5f, 0.5f);
+                AddForce(bodys, cross * Time.deltaTime * powar * coefficient);
+            }
+            else
+            {
+                AddForce(bodys, targetDirection * Time.deltaTime * powar);
+            }
 
-        yield return wait;
-
-        Vector3 cross = Vector3.Cross(targetDirection, Vector3.up).normalized;
-        body.AddForce(cross * Time.deltaTime * powar);
-
-        yield return wait;
-
-        body.AddForce(cross * -Time.deltaTime * powar);
-
+            if (count <= 0) break;
+            yield return wait;
+        }
         isAttacking = false;
-
     }
 
-    public void HitFloor(string partName, Collider col)
+    void AddForce(Rigidbody[] bodys, Vector3 powar)
+    {
+        for (int i = 0; i < bodys.Length; i++)
+        {
+            bodys[i].AddForce(powar);
+        }
+    }
+
+    public virtual void HitFloor(string partName, Collider col)
     {
         if (partName != "tip") return;
-        if(isAttacking)
-        {
-            StopCoroutine(coroutine);
-            isAttacking = false;
-        }
+        isAttacking = false;
 
         //先端が床に触れた
-        coroutine = StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut());
         state = TentacleState.FadeOut;
     }
 
