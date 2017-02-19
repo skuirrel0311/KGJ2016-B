@@ -5,13 +5,19 @@ using UnityEngine;
 //どの触手が攻撃するかを制御する
 public class TentacleManager : MonoBehaviour
 {
+    struct Spwaner
+    {
+        public Transform position;
+        public int index;
+    }
+
     public static TentacleManager Instance = null;
 
     public GameObject[] prefabs;
 
     public List<Transform> spwanPositionList = new List<Transform>();
 
-    public List<Transform> sufflePositionList = new List<Transform>();
+    public List<int> sufflePositionIndexList = new List<int>();
     public bool[] isSpawned;
 
     public float spawnInterbal;
@@ -35,7 +41,7 @@ public class TentacleManager : MonoBehaviour
 
         for(int i = 0;i < spwanPositionList.Count;i++)
         {
-            sufflePositionList.Add(spwanPositionList[i]);
+            sufflePositionIndexList.Add(i);
         }
 
         isSpawned = new bool[spwanPositionList.Count];
@@ -62,17 +68,16 @@ public class TentacleManager : MonoBehaviour
         int selectIndex = 0;
         SufflePositionList();
 
-        for (int i = 0; i < sufflePositionList.Count; i++)
+        for (int i = 0; i < sufflePositionIndexList.Count; i++)
         {
-            temp1 = Random.Range(0, prefabs.Length + 1);
+            temp1 = Random.Range(0, prefabs.Length);
             //今回選択されたトランスフォームのindexを取得
-            selectIndex = GetListIndex(sufflePositionList[i]);
+            selectIndex = sufflePositionIndexList[i];
 
             //そのトランスフォームが使われているか？
             if (!isSpawned[selectIndex])
             {
-                Debug.Log("i = " + i);
-                GameObject obj = Instantiate(prefabs[temp1], sufflePositionList[i].position, Quaternion.identity);
+                GameObject obj = Instantiate(prefabs[temp1], spwanPositionList[selectIndex].position, Quaternion.identity);
                 obj.GetComponent<TentacleContoller>().positionIndex = selectIndex;
                 isSpawned[selectIndex] = true;
                 return;
@@ -98,22 +103,13 @@ public class TentacleManager : MonoBehaviour
     void SufflePositionList()
     {
         int index = 0;
-        for (int i = 0; i < spwanPositionList.Count; i++)
+        int temp = 0;
+        for (int i = 0; i < sufflePositionIndexList.Count; i++)
         {
-            index = Random.Range(0, spwanPositionList.Count);
-            Swap(spwanPositionList[index], spwanPositionList[spwanPositionList.Count - 1]);
+            index = Random.Range(0, sufflePositionIndexList.Count);
+            temp = sufflePositionIndexList[i];
+            sufflePositionIndexList[i] = sufflePositionIndexList[sufflePositionIndexList.Count - 1];
+            sufflePositionIndexList[sufflePositionIndexList.Count - 1] = temp;
         }
-    }
-    void Swap(Transform t1, Transform t2)
-    {
-        Transform temp = t1;
-
-        t1 = t2;
-        t2 = temp;
-    }
-
-    int GetListIndex(Transform transform)
-    {
-        return spwanPositionList.FindIndex(n => n.Equals(transform));
     }
 }
