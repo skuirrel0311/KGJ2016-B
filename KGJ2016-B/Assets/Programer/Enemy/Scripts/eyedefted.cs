@@ -5,6 +5,7 @@ using UnityEngine;
 public class eyedefted : MonoBehaviour {
     public bool Isattackd;
     public GameObject dead;
+    public GameObject deadgus;
     bool doonce = false;
     bool particleonse = false;
 	// Use this for initialization
@@ -20,6 +21,7 @@ public class eyedefted : MonoBehaviour {
             if (!particleonse)
             {
                 Instantiate(dead, transform.position,Quaternion.EulerAngles(-90.0f, 0, 0));
+                Instantiate(deadgus, transform.position, Quaternion.EulerAngles(-90.0f, 0, 0));
                 particleonse = true;
             }
         }
