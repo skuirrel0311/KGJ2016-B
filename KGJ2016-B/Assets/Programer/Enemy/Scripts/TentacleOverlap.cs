@@ -10,7 +10,14 @@ public class TentacleOverlap : MonoBehaviour
 
     void Start()
     {
-        controller = GetComponentInParent<TentacleContoller>();
+    }
+
+    void Update()
+    {
+        if(controller == null)
+        {
+            controller = GetComponentInParent<TentacleContoller>();
+        }
     }
 
     void OnCollisionEnter(Collision col)
@@ -22,7 +29,7 @@ public class TentacleOverlap : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag != "Floor") return;
-
+        if (partName == "other") return;
         controller.HitFloor(partName, col);
     }
 }
