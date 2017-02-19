@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class PlayerHpGauge : PointGauge
 {
-    [SerializeField]
-    Image batten = null;
 
     public override void Update()
     {
@@ -23,17 +21,13 @@ public class PlayerHpGauge : PointGauge
 
     protected override void SetGaugeImage()
     {
-        //×を書く
-        for (int i = 0; i < maxValue; i++)
-        {
-            if (i >= value)
-            {
-                pointImages[i].sprite = batten.sprite;
-            }
-            else
-            {
-                pointImages[i].sprite = pointImagePrefab.GetComponent<Image>().sprite;
-            }
-        }
+        ////×を書く
+        //for (int i = 0; i < maxValue; i++)
+        //{
+        //    if (i < value)
+        //    {
+        //        pointImages[i].sprite = pointImagePrefab.GetComponent<Image>().sprite;
+        //    }
+        //}
     }
 }
