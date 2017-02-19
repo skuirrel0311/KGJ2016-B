@@ -26,6 +26,7 @@ public class AnimationTentacleController : TentacleContoller
 
     protected void Fade()
     {
+        TentacleManager.Instance.isSpawned[positionIndex] = false;
         Destroy(gameObject);
     }
 
