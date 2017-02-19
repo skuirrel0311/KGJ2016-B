@@ -31,6 +31,7 @@ public class TitleManager : BaseManager<TitleManager>
         if (Input.GetKeyDown(KeyCode.Return))
         {
             if (isChangeScene) return;
+            AudioManager.Instance.PlayOneShot("OpSE");
             isChangeScene = true;
             StartCoroutine(FadeManager.Instance.FadeOut(1.0f));
             StartCoroutine(KKUtilities.ChangeScene(sceneName, 1.0f));
