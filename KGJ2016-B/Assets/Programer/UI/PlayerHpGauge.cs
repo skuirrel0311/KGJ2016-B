@@ -8,12 +8,12 @@ public class PlayerHpGauge : PointGauge
 
     public override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             ChangeValue(1);
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             ChangeValue(-1);
         }
