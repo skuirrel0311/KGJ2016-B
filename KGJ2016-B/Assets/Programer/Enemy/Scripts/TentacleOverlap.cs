@@ -22,7 +22,11 @@ public class TentacleOverlap : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag != "Player") return;
+        if (col.gameObject.tag != "Player")
+        {
+            col.gameObject.GetComponent<CarPlaramater>().Isdamaged = true;
+            return;
+        }
         
     }
 

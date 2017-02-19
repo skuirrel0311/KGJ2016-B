@@ -34,6 +34,11 @@ public class PointGauge : BaseGauge
             pointImages[i].rectTransform.localScale = Vector3.one;
         }
     }
+    public override void Update()
+    {
+        ChangeValue(4 - ScoreManager.score);
+        base.Update();
+    }
 
     protected override void SetGaugeImage()
     {

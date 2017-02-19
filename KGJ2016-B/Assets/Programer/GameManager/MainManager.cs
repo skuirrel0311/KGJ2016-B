@@ -26,14 +26,14 @@ public class MainManager : BaseManager<TitleManager>
             fade = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            ChangeScene(sceneName[0]);
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ChangeScene(sceneName[1]);
-        }
+        //if (Input.GetKeyDown(KeyCode.Return))
+        //{
+        //    ChangeScene(sceneName[0]);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    ChangeScene(sceneName[1]);
+        //}
     }
 
     void ChangeScene(string sceneName)
