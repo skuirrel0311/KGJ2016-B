@@ -6,6 +6,7 @@ public class PlayerHpGauge : PointGauge
 
     public override void Update()
     {
+        ChangeValue(CarPlaramater.CarHp);
         if (Input.GetKeyDown(KeyCode.Z))
         {
             ChangeValue(1);

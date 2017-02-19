@@ -15,6 +15,7 @@ public class BaseGauge : MonoBehaviour
 
     public virtual void Update()
     {
+        
         if (!isCalc) return;
         isCalc = false;
 
@@ -25,7 +26,7 @@ public class BaseGauge : MonoBehaviour
     {
         isCalc = true;
 
-        value += point;
+        value = point;
         value = Mathf.Clamp(value, 0, maxValue);
     }
 
