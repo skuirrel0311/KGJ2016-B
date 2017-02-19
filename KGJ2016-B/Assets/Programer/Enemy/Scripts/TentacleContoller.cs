@@ -28,12 +28,12 @@ public class TentacleContoller : MonoBehaviour
     public int positionIndex;
     public bool isLive;
 
-    void Start()
+    public virtual void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         StartCoroutine(StartUp());
     }
-    void Update()
+    public virtual void Update()
     {
         if(tip.transform.position.x > 300.0f || tip.transform.position.z > 300.0f)
         {
@@ -60,7 +60,7 @@ public class TentacleContoller : MonoBehaviour
         Attack();
     }
 
-    public void Attack()
+    public virtual void Attack()
     {
         coroutine = StartCoroutine(Attacking());
     }
@@ -123,7 +123,7 @@ public class TentacleContoller : MonoBehaviour
         }
     }
 
-    public void HitFloor(string partName, Collider col)
+    public virtual void HitFloor(string partName, Collider col)
     {
         if (partName != "tip") return;
         isAttacking = false;
