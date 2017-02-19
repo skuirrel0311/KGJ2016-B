@@ -14,7 +14,7 @@ public class ResutManager : BaseManager<TitleManager>
     // Use this for initialization
     void Start()
     {
-
+        AudioManager.Instance.PlayOneShot("ClearSE");
     }
 
     // Update is called once per frame
@@ -31,6 +31,7 @@ public class ResutManager : BaseManager<TitleManager>
             //すでにシーン遷移に入っていたら実行しない
             if (isChangeScene) return;
             isChangeScene = true;
+            AudioManager.Instance.PlayOneShot("YesSE");
             StartCoroutine(FadeManager.Instance.FadeOut(1.0f));
             StartCoroutine(KKUtilities.ChangeScene("Title", 1.0f));
         }

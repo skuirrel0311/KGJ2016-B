@@ -16,7 +16,7 @@ public class MenuManager : BaseManager<TitleManager>
     // Use this for initialization
     void Start()
     {
-
+        AudioManager.Instance.Play("MenuBGM");
     }
 
     // Update is called once per frame
@@ -30,10 +30,12 @@ public class MenuManager : BaseManager<TitleManager>
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            AudioManager.Instance.PlayOneShot("Let'sGoSE");
             ChangeScene(sceneName[0]);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            AudioManager.Instance.PlayOneShot("YesSE");
             ChangeScene(sceneName[1]);
         }
     }

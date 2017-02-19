@@ -29,11 +29,13 @@ public class HowToPlayManager : BaseManager<TitleManager>
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            AudioManager.Instance.PlayOneShot("NoSE");
             ChangeScene(sceneName[0]);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ChangeScene(sceneName[1]);
+            AudioManager.Instance.PlayOneShot("Let'sGoSE");
+            ChangeScene(sceneName[1]);  
         }
     }
 
