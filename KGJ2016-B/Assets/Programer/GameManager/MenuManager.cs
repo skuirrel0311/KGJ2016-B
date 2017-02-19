@@ -42,6 +42,7 @@ public class MenuManager : BaseManager<TitleManager>
 
     void ChangeScene(string sceneName)
     {
+        Debug.Log("!");
         if (isChangeScene) return;
         isChangeScene = true;
         StartCoroutine(FadeManager.Instance.FadeOut(1.0f));

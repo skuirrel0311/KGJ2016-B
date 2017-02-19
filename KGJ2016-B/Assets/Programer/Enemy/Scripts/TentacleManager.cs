@@ -5,58 +5,78 @@ using UnityEngine;
 //どの触手が攻撃するかを制御する
 public class TentacleManager : MonoBehaviour
 {
-    public List<TentacleContoller> tentacleList = new List<TentacleContoller>();
+    public static TentacleManager Instance = null;
+
+    public GameObject prehub;
+
+    //public List<TentacleContoller> tentacleList = new List<TentacleContoller>();
+
+    List<Transform> spwanPositionList = new List<Transform>();
+    public bool[] isSpawned;
+
+    public float spawnInterbal;
+    float time;
+
+    void Awake()
+    {
+        if(Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     void Start()
     {
-        tentacleList.AddRange(GetComponentsInChildren<TentacleContoller>());
+        spwanPositionList.AddRange(GetComponentsInChildren<Transform>());
+        //自身をはずす
+        spwanPositionList.Remove(spwanPositionList.Find(n => n.Equals(transform)));
 
-        StartCoroutine(Attack());
+        isSpawned = new bool[spwanPositionList.Count];
+        for (int i = 0; i < isSpawned.Length; i++)
+        {
+            isSpawned[i] = false;
+        }
+
+        //最初にとりあえず何体か出しておく
+        for (int i = 0; i < 3; i++)
+        {
+            Spawn();
+        }
     }
 
-    IEnumerator Attack()
+    void Update()
     {
-        //どの職種が攻撃するか決定する
-        TentacleContoller[] tentacles;
-        tentacles = GetRandomTentacle(1);
-        //攻撃する間隔
-        WaitForSeconds wait = new WaitForSeconds(5.0f);
+        InterbalSpawning();
+        
+    }
 
+    void Spawn()
+    {
+        int temp;
         while (true)
         {
-            for (int i = 0; i < tentacles.Length; i++)
+
+            temp = Random.Range(0, spwanPositionList.Count);
+            if (!isSpawned[temp])
             {
-                tentacles[i].Attack();
+                GameObject obj = Instantiate(prehub, spwanPositionList[temp].position, Quaternion.identity);
+                obj.GetComponent<TentacleContoller>().positionIndex = temp;
+                isSpawned[temp] = true;
+                break;
             }
-
-            yield return wait;
         }
     }
 
-    TentacleContoller[] GetRandomTentacle(int num)
+    //一定時間ごとに沸くバージョン
+    void InterbalSpawning()
     {
-        TentacleContoller[] tentacles = new TentacleContoller[num];
-        int index;
-        
-        for(int i = 0;i< tentacleList.Count;i++)
+        time += Time.deltaTime;
+        if (time > spawnInterbal)
         {
-            index = Random.Range(0, tentacleList.Count);
-            Swap(tentacleList[index], tentacleList[tentacleList.Count - 1]);
+            Spawn();
+            time = 0f;
         }
-
-        for(int i = 0;i< tentacles.Length;i++)
-        {
-            tentacles[i] = tentacleList[i];
-        }
-
-        return tentacles;
-    }
-
-    void Swap(TentacleContoller tentacle1, TentacleContoller tentacle2)
-    {
-        TentacleContoller temp = tentacle1;
-
-        tentacle1 = tentacle2;
-        tentacle2 = temp;
     }
 }
