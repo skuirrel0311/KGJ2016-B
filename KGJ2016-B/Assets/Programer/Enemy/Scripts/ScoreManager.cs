@@ -6,6 +6,7 @@ public class ScoreManager : MonoBehaviour {
     public string sceneName;
     public static int score;
     public int scoreM;
+    bool doonce = false;
 	// Use this for initialization
 	void Start () {
         score = 0;
@@ -14,10 +15,10 @@ public class ScoreManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (score >= scoreM)
+        if (score >= scoreM && !doonce)
         {
-            score = 0;
-            StartCoroutine(KKUtilities.ChangeScene(sceneName, 1.0f));
+            doonce = true;
+            StartCoroutine(KKUtilities.ChangeScene(sceneName, 3.0f));
         }
     }
 }
