@@ -2,34 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//どの触手が攻撃するかを制御する
 public class TentacleManager : MonoBehaviour
 {
-    [SerializeField]
-    GameObject enemyPrefab = null;
-
-    [SerializeField]
-    List<Transform> startPositions = new List<Transform>();
+    public List<TentacleContoller> tentacleList = new List<TentacleContoller>();
 
     void Start()
     {
-        startPositions.AddRange(GetComponentsInChildren<Transform>());
-        Transform temp = startPositions.Find(n => n.Equals(transform));
-        startPositions.Remove(temp);
+        tentacleList.AddRange(GetComponentsInChildren<TentacleContoller>());
 
-        StartCoroutine(EnemyCreator());
+        StartCoroutine(Attack());
     }
-    
-    IEnumerator EnemyCreator()
+
+    IEnumerator Attack()
     {
+        //どの職種が攻撃するか決定する
+        TentacleContoller[] tentacles;
+        tentacles = GetRandomTentacle(1);
+        //攻撃する間隔
         WaitForSeconds wait = new WaitForSeconds(5.0f);
-        yield return new WaitForSeconds(1.0f);
-        int index = Random.Range(0, startPositions.Count);
-        Instantiate(enemyPrefab, startPositions[index].position, startPositions[index].rotation);
+
         while (true)
         {
+            for (int i = 0; i < tentacles.Length; i++)
+            {
+                tentacles[i].Attack();
+            }
+
             yield return wait;
-            index = Random.Range(0, startPositions.Count);
-            Instantiate(enemyPrefab, startPositions[index].position, startPositions[index].rotation);
         }
+    }
+
+    TentacleContoller[] GetRandomTentacle(int num)
+    {
+        TentacleContoller[] tentacles = new TentacleContoller[num];
+        int index;
+        
+        for(int i = 0;i< tentacleList.Count;i++)
+        {
+            index = Random.Range(0, tentacleList.Count);
+            Swap(tentacleList[index], tentacleList[tentacleList.Count - 1]);
+        }
+
+        for(int i = 0;i< tentacles.Length;i++)
+        {
+            tentacles[i] = tentacleList[i];
+        }
+
+        return tentacles;
+    }
+
+    void Swap(TentacleContoller tentacle1, TentacleContoller tentacle2)
+    {
+        TentacleContoller temp = tentacle1;
+
+        tentacle1 = tentacle2;
+        tentacle2 = temp;
     }
 }

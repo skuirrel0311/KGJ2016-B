@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TentacleState
+{
+    StartUp, Idle, Attack, FadeOut
+}
+
 public class TentacleContoller : MonoBehaviour
 {
     [SerializeField]
@@ -9,8 +14,13 @@ public class TentacleContoller : MonoBehaviour
 
     GameObject player;
 
+    public TentacleState state = TentacleState.StartUp;
+
     [SerializeField]
     float powar = 1000.0f;
+
+    Coroutine coroutine;
+    bool isAttacking;
 
     void Start()
     {
@@ -27,8 +37,10 @@ public class TentacleContoller : MonoBehaviour
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition;
         targetPosition.y = 1.0f;
+        Rigidbody body = tip.GetComponent<Rigidbody>();
+        WaitForSeconds wait = new WaitForSeconds(0.5f);
 
-        while(true)
+        while (true)
         {
             t += Time.deltaTime;
 
@@ -36,6 +48,19 @@ public class TentacleContoller : MonoBehaviour
             if (t > 3.0f) break;
             yield return null;
         }
+    }
+
+    public void Attack()
+    {
+        coroutine = StartCoroutine(Attacking());
+    }
+
+    IEnumerator Attacking()
+    {
+        isAttacking = true;
+        Rigidbody body = tip.GetComponent<Rigidbody>();
+        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        state = TentacleState.Attack;
 
         //倒したい方向を調べる
         Vector3 targetDirection;
@@ -45,5 +70,38 @@ public class TentacleContoller : MonoBehaviour
             targetDirection = Vector3.Normalize(Vector3.zero - tip.transform.position);
 
         tip.GetComponent<Rigidbody>().AddForce(targetDirection * Time.deltaTime * powar);
+
+        yield return new WaitForSeconds(3.0f);
+
+        yield return wait;
+
+        Vector3 cross = Vector3.Cross(targetDirection, Vector3.up).normalized;
+        body.AddForce(cross * Time.deltaTime * powar);
+
+        yield return wait;
+
+        body.AddForce(cross * -Time.deltaTime * powar);
+
+        isAttacking = false;
+
+    }
+
+    public void HitFloor(string partName, Collider col)
+    {
+        if (partName != "tip") return;
+        if(isAttacking)
+        {
+            StopCoroutine(coroutine);
+            isAttacking = false;
+        }
+
+        //先端が床に触れた
+        coroutine = StartCoroutine(FadeOut());
+        state = TentacleState.FadeOut;
+    }
+
+    IEnumerator FadeOut()
+    {
+        yield return null;
     }
 }
