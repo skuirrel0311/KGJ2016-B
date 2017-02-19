@@ -26,10 +26,12 @@ public class TentacleOverlap : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider col)
+    public virtual void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag != "Floor") return;
         if (partName == "other") return;
+
+        controller = GetComponentInParent<TentacleContoller>();
         controller.HitFloor(partName, col);
     }
 }
