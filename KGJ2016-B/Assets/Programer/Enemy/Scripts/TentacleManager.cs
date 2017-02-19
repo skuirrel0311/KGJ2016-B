@@ -7,10 +7,8 @@ public class TentacleManager : MonoBehaviour
 {
     public static TentacleManager Instance = null;
 
-    public GameObject prehub;
-
-    //public List<TentacleContoller> tentacleList = new List<TentacleContoller>();
-
+    public GameObject[] prefabs;
+    
     List<Transform> spwanPositionList = new List<Transform>();
     public bool[] isSpawned;
 
@@ -55,13 +53,15 @@ public class TentacleManager : MonoBehaviour
     void Spawn()
     {
         int temp;
+        int temp1;
         while (true)
         {
 
             temp = Random.Range(0, spwanPositionList.Count);
+            temp1 = Random.Range(0, prefabs.Length + 1);
             if (!isSpawned[temp])
             {
-                GameObject obj = Instantiate(prehub, spwanPositionList[temp].position, Quaternion.identity);
+                GameObject obj = Instantiate(prefabs[temp1], spwanPositionList[temp].position, Quaternion.identity);
                 obj.GetComponent<TentacleContoller>().positionIndex = temp;
                 isSpawned[temp] = true;
                 break;

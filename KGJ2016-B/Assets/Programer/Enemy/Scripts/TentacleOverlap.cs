@@ -22,8 +22,8 @@ public class TentacleOverlap : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag != "Floor" && col.gameObject.tag != "Player") return;
-
+        if (col.gameObject.tag != "Player") return;
+        
     }
 
     void OnTriggerEnter(Collider col)
