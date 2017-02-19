@@ -15,6 +15,15 @@ public class PointGauge : BaseGauge
 
     public override void Start()
     {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ChangeValue(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            ChangeValue(-1);
+        }
         base.Start();
         pointImages = new Image[value];
         for (int i = 0; i < value; i ++)
