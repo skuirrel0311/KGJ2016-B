@@ -17,10 +17,8 @@ public class CarCollision : MonoBehaviour {
         {
         if (collider.gameObject.tag == "Finish")
         {
-            
-            ScoreManager.score++;
-            Debug.Log(ScoreManager.score);
-            DestroyObject(collider.gameObject);
+
+            collider.gameObject.GetComponent<eyedefted>().Isattackd = true;
 
         }
     }

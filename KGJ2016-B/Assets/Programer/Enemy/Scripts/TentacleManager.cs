@@ -8,8 +8,10 @@ public class TentacleManager : MonoBehaviour
     public static TentacleManager Instance = null;
 
     public GameObject[] prefabs;
-    
-    List<Transform> spwanPositionList = new List<Transform>();
+
+    public List<Transform> spwanPositionList = new List<Transform>();
+
+    public List<Transform> sufflePositionList = new List<Transform>();
     public bool[] isSpawned;
 
     public float spawnInterbal;
@@ -17,7 +19,7 @@ public class TentacleManager : MonoBehaviour
 
     void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -30,6 +32,11 @@ public class TentacleManager : MonoBehaviour
         spwanPositionList.AddRange(GetComponentsInChildren<Transform>());
         //自身をはずす
         spwanPositionList.Remove(spwanPositionList.Find(n => n.Equals(transform)));
+
+        for(int i = 0;i < spwanPositionList.Count;i++)
+        {
+            sufflePositionList.Add(spwanPositionList[i]);
+        }
 
         isSpawned = new bool[spwanPositionList.Count];
         for (int i = 0; i < isSpawned.Length; i++)
@@ -46,26 +53,33 @@ public class TentacleManager : MonoBehaviour
 
     void Update()
     {
-        InterbalSpawning(1);        
+        InterbalSpawning(1);
     }
 
     void Spawn()
     {
-        int temp;
         int temp1;
-        while (true)
-        {
+        int selectIndex = 0;
+        SufflePositionList();
 
-            temp = Random.Range(0, spwanPositionList.Count);
+        for (int i = 0; i < sufflePositionList.Count; i++)
+        {
             temp1 = Random.Range(0, prefabs.Length + 1);
-            if (!isSpawned[temp])
+            //今回選択されたトランスフォームのindexを取得
+            selectIndex = GetListIndex(sufflePositionList[i]);
+
+            //そのトランスフォームが使われているか？
+            if (!isSpawned[selectIndex])
             {
-                GameObject obj = Instantiate(prefabs[temp1], spwanPositionList[temp].position, Quaternion.identity);
-                obj.GetComponent<TentacleContoller>().positionIndex = temp;
-                isSpawned[temp] = true;
-                break;
+                Debug.Log("i = " + i);
+                GameObject obj = Instantiate(prefabs[temp1], sufflePositionList[i].position, Quaternion.identity);
+                obj.GetComponent<TentacleContoller>().positionIndex = selectIndex;
+                isSpawned[selectIndex] = true;
+                return;
             }
         }
+
+        //生成できなかった
     }
 
     //一定時間ごとにspawnNum本の触手が沸くバージョン
@@ -80,5 +94,26 @@ public class TentacleManager : MonoBehaviour
             }
             time = 0f;
         }
+    }
+    void SufflePositionList()
+    {
+        int index = 0;
+        for (int i = 0; i < spwanPositionList.Count; i++)
+        {
+            index = Random.Range(0, spwanPositionList.Count);
+            Swap(spwanPositionList[index], spwanPositionList[spwanPositionList.Count - 1]);
+        }
+    }
+    void Swap(Transform t1, Transform t2)
+    {
+        Transform temp = t1;
+
+        t1 = t2;
+        t2 = temp;
+    }
+
+    int GetListIndex(Transform transform)
+    {
+        return spwanPositionList.FindIndex(n => n.Equals(transform));
     }
 }
